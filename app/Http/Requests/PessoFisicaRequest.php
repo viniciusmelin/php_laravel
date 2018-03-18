@@ -120,7 +120,6 @@ class PessoFisicaRequest extends FormRequest
         else
         {
             $this->formatarCNPJ();
-           
         }
 
         $this->formatarCEP();
@@ -131,20 +130,16 @@ class PessoFisicaRequest extends FormRequest
     {
         
         $this->merge(['cpf' => preg_replace( '/[^0-9]/', '', $this->request->get('cpf') )]);
-       //$this->merge(['cpf' =>'22222222222']);
     }
 
     protected function formatarCNPJ()
     {
         
         $this->merge(['cnpj' => preg_replace( '/[^0-9]/', '', $this->request->get('cnpj') )]);
-       //$this->merge(['cpf' =>'22222222222']);
     }
     protected function formatarCEP()
     {
         
         $this->merge(['cep' => preg_replace( '/[^0-9]/', '', $this->request->get('cep') )]);
-       //$this->merge(['cpf' =>'22222222222']);
-
     }
 }
