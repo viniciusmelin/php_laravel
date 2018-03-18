@@ -21,7 +21,8 @@ class Endereco extends Migration
             $table->string('bairro',50);
             $table->string('cidade',30);
             $table->string('uf',8);
-            $table->integer('pessoa_id');
+            $table->string('cep',8);
+            $table->double('pessoa_id',11,0)->unique();
             $table->timestamps();
         });
     }

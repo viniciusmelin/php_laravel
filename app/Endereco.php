@@ -12,6 +12,6 @@ class Endereco extends Model
 
     public function pessoafisica()
     {
-        return $this->belongsTo('App\PessoaFisica',);
+        //return $this->belongsTo('App\PessoaFisica',);
     }
 }

@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Validator;
+
+use App\Http\Requests\PessoFisicaRequest;
 
 class PessoaController extends Controller
 {
@@ -23,7 +27,8 @@ class PessoaController extends Controller
      */
     public function create()
     {
-       return view('pessoa.cadastrar');
+        $date = Carbon::now()->format('Y-m-d');
+       return view('pessoa.cadastrar',compact('date'));
     }
 
     /**
@@ -32,9 +37,11 @@ class PessoaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PessoFisicaRequest $request)
     {
-        //
+        //if()
+        
+        return $validator;
     }
 
     /**

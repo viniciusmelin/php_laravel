@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/inputmask.min.css') }}" rel="stylesheet">
+    @yield('css')
 </head>
 <body>
     <div id="app">
@@ -49,5 +51,9 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/inputmask.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
+    
+    @yield('js')
 </body>
 </html>

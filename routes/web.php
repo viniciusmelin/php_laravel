@@ -17,4 +17,4 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('pessoa','PessoaController@index')->name('pessoa.inicial');
 Route::get('pessoa/criar','PessoaController@create')->name('pessoa.criar');
-Route::get('pessoa/salvar','PessooaController@store')->name('pessoa.salvar');
+Route::post('pessoa/salvar','PessoaController@store')->name('pessoa.salvar');

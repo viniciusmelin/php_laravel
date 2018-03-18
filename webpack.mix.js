@@ -13,3 +13,7 @@ let mix = require('laravel-mix');
 
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
+
+mix.copy('node_modules/inputmask/css/inputmask.css','public/css/inputmask.min.css');
+mix.copy('node_modules/inputmask/dist/min/inputmask/inputmask.min.js','public/js/inputmask.min.js');
+mix.copy('node_modules/inputmask/dist/jquery.inputmask.bundle.js','public/js/jquery.inputmask.min.js');
