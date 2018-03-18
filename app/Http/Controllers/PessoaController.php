@@ -27,7 +27,15 @@ class PessoaController extends Controller
      */
     public function create()
     {
-        $date = Carbon::now()->format('Y-m-d');
+
+        $dt = Carbon::parse('2010-05-01');
+        //$date = Carbon::now()->format('Y-m-d');
+         $date = Carbon::now();
+        // $date3 = $dt->subYears(6);
+        // $t1 = strtotime( $date);
+        // $t2 =  $dt->diffInYears($date);
+        // $date2 = preg_replace( '/[^0-9]/', '', '111.111.111-11' );;
+
        return view('pessoa.cadastrar',compact('date'));
     }
 
@@ -39,9 +47,12 @@ class PessoaController extends Controller
      */
     public function store(PessoFisicaRequest $request)
     {
-        //if()
+        if($request->optpessoa == 1)
+        {
+
+        }
         
-        return $validator;
+        return $request;
     }
 
     /**

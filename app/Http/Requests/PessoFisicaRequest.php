@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
+use App\Rules\Cpf;
 
 class PessoFisicaRequest extends FormRequest
 {
@@ -20,7 +22,9 @@ class PessoFisicaRequest extends FormRequest
     {
         if($this->optpessoa ==1)
         {
+
             return [
+                "cpf.valido"=> "CPF nao é valido",
                 "cpf.required"=> "Campo é Obrigatório CPF",
                 "cpf.max"=> "Tamanho maxímo é 11 números",
                 "nome.required"=> "Campo é Obrigatório",
@@ -29,7 +33,8 @@ class PessoFisicaRequest extends FormRequest
                 "sobrenome.required"=> "Campo é Obrigatório",
                 "sobrenome.max"=> "Tamanho maxímo é 15 caracteres",
                 "sobrenome.min"=> "Tamanho mínimo é 1 caracteres",
-                "data_nascimento.required"=> "2018-03-17",
+                "data_nascimento.required"=> "Campo é Obrigatório",
+                "data_nascimento.before"=> "Pessoa precisa ter no mínimo 19 anos",
                 "logradouro.required"=> "Campo é Obrigatório",
                 "numero.required"=> "Campo é Obrigatório",
                 "bairro.required"=> "Campo é Obrigatório",
@@ -70,11 +75,16 @@ class PessoFisicaRequest extends FormRequest
     {
         if($this->optpessoa ==1)
         {
+
+            $dataAtual = Carbon::now();
+            $data = $dataAtual->subYears(19);
+           
             return [
-                "cpf"=> "required|max:11",
+                "cpf"=> ['required',new Cpf($this->cpf)],
+                //"cpf"=> "max:11",
                 "nome"=> "required|max:50|min:2",
                 "sobrenome"=> "required|max:15|min:1",
-                "data_nascimento"=> "required",
+                "data_nascimento"=> 'required|before:'.$data.'',
                 "logradouro"=> "required",
                 "numero"=> "required",
                 "bairro"=> "required",
@@ -99,5 +109,42 @@ class PessoFisicaRequest extends FormRequest
                 
             ];
         }
+    }
+
+    public function getValidatorInstance()
+    {
+        if($this->optpessoa==1)
+        {
+            $this->formatarCpf();
+        }
+        else
+        {
+            $this->formatarCNPJ();
+           
+        }
+
+        $this->formatarCEP();
+        return parent::getValidatorInstance();
+    }
+
+    protected function formatarCpf()
+    {
+        
+        $this->merge(['cpf' => preg_replace( '/[^0-9]/', '', $this->request->get('cpf') )]);
+       //$this->merge(['cpf' =>'22222222222']);
+    }
+
+    protected function formatarCNPJ()
+    {
+        
+        $this->merge(['cnpj' => preg_replace( '/[^0-9]/', '', $this->request->get('cnpj') )]);
+       //$this->merge(['cpf' =>'22222222222']);
+    }
+    protected function formatarCEP()
+    {
+        
+        $this->merge(['cep' => preg_replace( '/[^0-9]/', '', $this->request->get('cep') )]);
+       //$this->merge(['cpf' =>'22222222222']);
+
     }
 }

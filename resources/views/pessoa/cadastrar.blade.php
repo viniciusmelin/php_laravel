@@ -49,7 +49,7 @@
           <div class="row">
             <div class="form-group has-feedback {{$errors->has('cpf') ? 'has-error':''}} col-md-4">
               <label for="cpf">CPF</label>
-              <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Enter email" data-inputmask="'mask':'999.999.999-99'"  value="{{old('cpf','')}}">
+              <input type="text" class="form-control" id="cpf" name="cpf" placeholder="Informe um CPF" data-inputmask="'mask':'999.999.999-99'"  value="{{old('cpf','')}}">
               <small id="cpfinformacao" class="form-text text-muted">"Informe um CPF válido".</small>
               @if($errors->has('cpf'))
               <span class="help-block"><strong>{{$errors->first('cpf')}}</strong></span>
@@ -150,7 +150,7 @@
                 @endif
               </div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
               <div class="form-group has-feedback {{$errors->has('uf') ? 'has-error':''}}">
                 <label for="uf">UF</label>
                 <input type="text" class="form-control" id="uf" size="2" name="uf"  value="{{old('uf','')}}">
@@ -171,8 +171,7 @@
 @section('js')
 <script >
   $(document).ready(function(){
-    console.log(`{{old('cep')}}`);
-    $("#cpf,#cnpj,#cep").inputmask({"clearIncomplete":true},{'automask':true});
+    $("#cpf,#cnpj,#cep").inputmask({"clearIncomplete":true},{'automask':true},{'removeMaskOnSubmit': true});
     var optpessoa = `{{old('optpessoa')}}`
     if(optpessoa==2)
     {
