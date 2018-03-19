@@ -19,6 +19,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "font-awesome": "^4.7.0",
         "inputmask": "^3.3.11"
     }
 }

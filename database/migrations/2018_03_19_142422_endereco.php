@@ -14,7 +14,7 @@ class Endereco extends Migration
     public function up()
     {
         Schema::create('endereco', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('pessoa_id')->unsigned();
             $table->string('logradouro',50);
             $table->string('numero',10);
             $table->string('complemento',20)->nullable();
@@ -22,8 +22,9 @@ class Endereco extends Migration
             $table->string('cidade',30);
             $table->string('uf',8);
             $table->string('cep',8);
-            $table->double('pessoa_id',11,0)->unique();
             $table->timestamps();
+            $table->foreign('pessoa_id')->references('id')->on('pessoa')->onDelete('cascade');
+            $table->primary('pessoa_id');
         });
     }
 

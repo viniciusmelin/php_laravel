@@ -19,11 +19,12 @@ class PessoaJuridica extends Migration
     public function up()
     {
         Schema::create('pessoa_juridica', function (Blueprint $table) {
-            $table->increments('id');
-            $table->double('cnpj',11,0);
+            $table->integer('pessoa_id')->unsigned();
             $table->string('razao_social',50);
             $table->string('nome_fantasia',50);
             $table->timestamps();
+            $table->foreign('pessoa_id')->references('id')->on('pessoa')->onDelete('cascade');
+            $table->primary('pessoa_id');
         });
     }
 

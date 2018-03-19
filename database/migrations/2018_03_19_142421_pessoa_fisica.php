@@ -28,12 +28,13 @@ class PessoaFisica extends Migration
     public function up()
     {
         Schema::create('pessoa_fisica', function (Blueprint $table) {
-            $table->increments('id');
-            $table->double('cpf',11,0);
+            $table->integer('pessoa_id')->unsigned();
             $table->date('data_nascimento');
             $table->string('nome',50);
             $table->string('sobrenome',15);
             $table->timestamps();
+            $table->foreign('pessoa_id')->references('id')->on('pessoa')->onDelete('cascade');
+            $table->primary('pessoa_id');
         });
     }
 

@@ -71,6 +71,8 @@
                    Cia Técnica
                 </div>
                 <a class="btn btn-info" href="{{route('pessoa.inicial')}}">Ir para Pessoa</a>
+                <a class="btn btn-info" href="https://github.com/viniciusmelin"><i class="fab fa-github"></i>Github</a>
+                
             </div>
         </div>
     </body>

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Validator;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PessoFisicaRequest;
+use App\Pessoa;
+use App\PessoaFisica;
+use App\PessoaJuridica;
 
 class PessoaController extends Controller
 {
@@ -27,15 +29,7 @@ class PessoaController extends Controller
      */
     public function create()
     {
-
-        $dt = Carbon::parse('2010-05-01');
-        //$date = Carbon::now()->format('Y-m-d');
-         $date = Carbon::now();
-        // $date3 = $dt->subYears(6);
-        // $t1 = strtotime( $date);
-        // $t2 =  $dt->diffInYears($date);
-        // $date2 = preg_replace( '/[^0-9]/', '', '111.111.111-11' );;
-
+        $date = Carbon::now()->format('Y-m-d');
        return view('pessoa.cadastrar',compact('date'));
     }
 
@@ -49,10 +43,56 @@ class PessoaController extends Controller
     {
         if($request->optpessoa == 1)
         {
+            try
+            {
+                DB::beginTransaction();
+                $pessoa = new Pessoa();
+                $pessoa->cpfcnpj = $request->cpf;
+                if($pessoa->save())
+                {
+                    $pessoa_fisica = new PessoaFisica();
+                    $pessoa_fisica->pessoa_id = $pessoa->id;
+                    $pessoa_fisica->data_nascimento = $request->data_nascimento;
+                    $pessoa_fisica->nome = $request->nome;
+                    $pessoa_fisica->sobrenome = $pessoa_fisica->sobrenome;
+                    if($pessoa_fisica->save())
+                    {
+                        $endereco = new Endereco();
+                        $endereco->pessoa_id = $pessoa->id;
+                        $endereco->logradouro = $request->logradouro;
+                        $endereco->numero = $request->numero;
+                        $endereco->complemento = $request->complemento;
+                        $endereco->bairro = $request->bairro;
+                        $endereco->cep = $request->cep;
+                        if($endereco->save())
+                        {
+                            
+                            \Session::flash('success',"Pessoa Fisíca cadastrado com sucesso");
+                            DB::commit();
+                            return redirect()->route('pessoa.inicial');
+                        }
+                    }
+                }
+                DB::rollBack();
+                \Session::flash('warning',"Não foi possível cadastrar Pessoa Fisíca");
+                
+                return back()->withInput();
+            }
+            catch(\Exeception $e)
+            {
+                \Session::flash('error',"Não foi possível cadatrar pessoa.Erro:".$e->message()."");
+                return back()->withInput();
+            }
 
         }
-        
-        return $request;
+        else if($request->optpessoa == 2)
+        {
+            
+        }
+
+
+        \Session::flash('warning',"Não foi possível cadastrar Pessoa");
+        return back()->withInput();
     }
 
     /**

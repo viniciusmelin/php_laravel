@@ -4,12 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PessoaJuridica extends Model
+class PessoaFisica extends Model
 {
-    protected $table= 'pessoa_juridica';
+    protected $table = 'pessoa_fisica';
     protected $primarykey = 'pessoa_id';
-    protected $fillable = ['pessoa_id','cnpj','razao_social','nome_fantasia'];
-
+    protected $fillable = ['pessoa_id','data_nascimento','nome','sobrenome'];
 
     public function pessoa()
     {
