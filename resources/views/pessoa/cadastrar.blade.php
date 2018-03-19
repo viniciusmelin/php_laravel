@@ -172,7 +172,6 @@
 <script >
   $(document).ready(function(){
     $("#cpf,#cnpj,#cep").inputmask({"clearIncomplete":true},{'automask':true},{'removeMaskOnSubmit': true});
-    var optpessoa = `{{old('optpessoa')}}`
     if(optpessoa==2)
     {
       $('#pessoa_juridica').attr('checked',true);
