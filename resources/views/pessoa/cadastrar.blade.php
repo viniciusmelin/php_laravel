@@ -28,19 +28,19 @@
               <label for="pessoa_juridica" class="radio-inline">
                 <input type="radio" name="optpessoa" value="2" id="pessoa_juridica">Pessoa Jurídica</label>
             </div>
+            <div class="row">
+                <div class="form-group has-feedback {{$errors->has('cpfcnpj') ? 'has-error':''}} col-md-4">
+                    <label id="labeldescricao" for="cpfcnpj">CPF</label>
+                    <input type="text" class="form-control" name="cpfcnpj" id="cpfcnpj" value="{{old('cpfcnpj','')}}">
+                    <small id="cnpjinformacao" class="form-text text-muted">"Informe um CNPJ válido".</small>
+                    @if($errors->has('cpfcnpj'))
+                    <span class="help-block">
+                      <strong>{{$errors->first('cpfcnpj')}}</strong>
+                    </span>
+                    @endif
+                  </div>
+            </div>
             <div id="divpessoajuridica">
-              <div class="row">
-                <div class="form-group has-feedback {{$errors->has('cnpj') ? 'has-error':''}} col-md-4">
-                  <label for="cnpj">CNPJ</label>
-                  <input type="text" class="form-control" name="cnpj" id="cnpj" data-inputmask="'mask':'99.999.999/9999-99'" value="{{old('cnpj','')}}">
-                  <small id="cnpjinformacao" class="form-text text-muted">"Informe um CNPJ válido".</small>
-                  @if($errors->has('cnpj'))
-                  <span class="help-block">
-                    <strong>{{$errors->first('cnpj')}}</strong>
-                  </span>
-                  @endif
-                </div>
-              </div>
               <div class="row">
                 <div class="col-md-5">
                   <div class="form-group has-feedback {{$errors->has('razao_social') ? 'has-error':''}}">
@@ -67,19 +67,6 @@
               </div>
             </div>
             <div id="divpessoaFisica">
-              <div class="row">
-                <div class="form-group has-feedback {{$errors->has('cpfcnpj') ? 'has-error':''}} col-md-4">
-                  <label for="cpfcnpj">CPF</label>
-                  <input type="text" class="form-control" id="cpfcnpj" name="cpfcnpj" placeholder="Informe um CPF" data-inputmask="'mask':'999.999.999-99'"
-                    value="{{old('cpfcnpj','')}}">
-                  <small id="cpfinformacao" class="form-text text-muted">"Informe um CPF válido".</small>
-                  @if($errors->has('cpfcnpj'))
-                  <span class="help-block">
-                    <strong>{{$errors->first('cpfcnpj')}}</strong>
-                  </span>
-                  @endif
-                </div>
-              </div>
               <div class="row">
                 <div class="col-md-5">
                   <div class="form-group has-feedback {{$errors->has('nome') ? 'has-error':''}}">
@@ -210,6 +197,7 @@
 @endsection @section('js')
 <script>
   $(document).ready(function () {
+    // data-inputmask="'mask':'99.999.999/9999-99'" 
     $("#cpfcnpj,#cep").inputmask({ "clearIncomplete": true }, { 'automask': true }, { 'removeMaskOnSubmit': true });
     var optpessoa = `{{old('optpessoa')}}`
     if (optpessoa == 2) {
@@ -217,11 +205,14 @@
       $('#divpessoaFisica').hide();
     }
     else {
+      $('#cpfcnpj').inputmask('999.999.999-99');
       $('#divpessoajuridica').hide();
       $('#pessoa_fisica').attr('checked', true);
     }
     $('input[type=radio][name=optpessoa]').click(function () {
       if (this.value == 1) {
+        $('#labeldescricao').text('CPF');
+        $('#cpfcnpj').inputmask('999.999.999-99');
         $('#divpessoajuridica input[type="text"]').val('');
         $('#divpessoajuridica').hide();
         // $("#divpessoajuridica *").attr("disabled", "disabled");
@@ -229,6 +220,8 @@
         $('#pessoa_fisica').attr('checked', true);
       }
       else if (this.value == 2) {
+        $('#labeldescricao').text('CNPJ');
+        $('#cpfcnpj').inputmask('99.999.999/9999-99');
         $('.form-group has-feedback').prop('has-error');
         $('#divpessoajuridica').show();
         $('#divpessoaFisica').hide();

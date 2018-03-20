@@ -53,7 +53,6 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/inputmask.min.js') }}"></script>
     <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
-    
     @yield('js')
 </body>
 </html>

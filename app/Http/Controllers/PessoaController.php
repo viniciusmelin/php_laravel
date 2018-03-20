@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\PessoFisicaRequest;
+use App\Http\Requests\PessoaRequest;
 use App\Pessoa;
 use App\PessoaFisica;
 use App\PessoaJuridica;
 use App\Endereco;
-
+use Carbon\Carbon;
 class PessoaController extends Controller
 {
     private $id;
@@ -22,7 +22,8 @@ class PessoaController extends Controller
     public function index()
     {
         $pessoa_fisica = PessoaFisica::with('pessoa')->get();
-        return view('pessoa.index',compact('pessoa_fisica'));
+        $pessoa_juridica = PessoaJuridica::with('pessoa')->get();
+        return view('pessoa.index',compact('pessoa_fisica','pessoa_juridica'));
     }
 
     /**
@@ -42,7 +43,7 @@ class PessoaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PessoFisicaRequest $request)
+    public function store(PessoaRequest $request)
     {
         if($request->optpessoa == 1)
         {
@@ -85,6 +86,7 @@ class PessoaController extends Controller
             }
             catch(\Exeception $e)
             {
+                DB::rollBack();
                 \Session::flash('error',"Não foi possível cadatrar pessoa.Erro:".$e->message()."");
                 return back()->withInput();
             }
@@ -92,7 +94,48 @@ class PessoaController extends Controller
         }
         else if($request->optpessoa == 2)
         {
-            
+            try
+            {
+                DB::beginTransaction();
+                $pessoa = new Pessoa();
+                $pessoa->cpfcnpj = $request->cpfcnpj;
+                if($pessoa->save())
+                {
+                    $pessoa_juridica = new PessoaJuridica();
+                    $pessoa_juridica->pessoa_id = $pessoa->id;
+                    $pessoa_juridica->razao_social = $request->razao_social;
+                    $pessoa_juridica->nome_fantasia = $request->nome_fantasia;
+                    if($pessoa_juridica->save())
+                    {
+                        $endereco = new Endereco();
+                        $endereco->pessoa_id = $pessoa->id;
+                        $endereco->logradouro = $request->logradouro;
+                        $endereco->numero = $request->numero;
+                        $endereco->complemento = $request->complemento;
+                        $endereco->bairro = $request->bairro;
+                        $endereco->cidade = $request->cidade;
+                        $endereco->uf = $request->uf;
+                        $endereco->cep = $request->cep;
+                        if($endereco->save())
+                        {
+                            
+                            \Session::flash('success',"Pessoa Jurídica cadastrado com sucesso");
+                            DB::commit();
+                            return redirect()->route('pessoa.inicial');
+                        }
+                    }
+                }
+                DB::rollBack();
+                \Session::flash('warning',"Não foi possível cadastrar Pessoa Jurídica");
+                
+                return back()->withInput();
+            }
+            catch(\Exeception $e)
+            {
+                DB::rollBack();
+                \Session::flash('error',"Não foi possível cadatrar pessoa.Erro:".$e->message()."");
+                return back()->withInput();
+            }
         }
 
 
@@ -119,16 +162,19 @@ class PessoaController extends Controller
      */
     public function edit($id)
     {
-        
-        if(Pessoa::has('pessoaFisica')->where('id',$id))
+        //return PessoaFisica::where('pessoa_id',$id)->first();
+        if(PessoaFisica::where('pessoa_id',$id)->first() != null)
         {
+
            $pessoafisica = Pessoa::with(['pessoaFisica','endereco'])->where('id',$id)->first();
            //return $pessoafisica;
            return view('pessoa.editarPessoaFisica',compact('pessoafisica'));
         }
         else if(Pessoa::has('pessoajuridica')->where('id',$id))
         {
-            return 'pessoa juridica';
+            $pessoajuridica = Pessoa::with(['pessoajuridica','endereco'])->where('id',$id)->first();
+            //return $pessoafisica;
+            return view('pessoa.editarPessoaJuridica',compact('pessoajuridica'));
         }
         
     }
@@ -140,7 +186,7 @@ class PessoaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PessoFisicaRequest $request)
+    public function update(PessoaRequest $request)
     {
         //return $request;
         if($request->optpessoa==1)
@@ -178,6 +224,40 @@ class PessoaController extends Controller
                 return $e->getMessage();
             }
         }
+        else if($request->optpessoa==2)
+        {
+            try
+            {
+                //DB::beginTransaction();
+                $pessoa =  Pessoa::with(['pessoajuridica','endereco'])->where('id',$request->id)->first();
+                $pessoa->cpfcnpj = $request->cpfcnpj;
+                $pessoa->save();
+                $pessoa->pessoajuridica::where('pessoa_id',$pessoa->id)
+                ->update([
+                    "razao_social"=> $request->razao_social,
+                    "nome_fantasia" => $request->nome_fantasia
+                    ]);
+                
+
+                 $pessoa->endereco::where('pessoa_id',$pessoa->id)
+                ->update([
+                    "logradouro" => $request->logradouro,
+                    "numero" => $request->numero,
+                    "complemento" => $request->complemento,
+                    "bairro" => $request->bairro,
+                    "cidade" => $request->cidade,
+                    "uf" => $request->uf,
+                    "cep" => $request->cep
+                    ]);
+                
+                return redirect()->route('pessoa.inicial');
+
+            }
+            catch(\Exception $e)
+            {
+                return $e->getMessage();
+            }
+        }
     }
 
     /**
@@ -186,7 +266,7 @@ class PessoaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pesso $request)
+    public function destroy(Request $request)
     {
         if(Pessoa::where('id',$request->id)->delete())
         {

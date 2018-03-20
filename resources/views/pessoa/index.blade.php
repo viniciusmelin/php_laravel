@@ -29,15 +29,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($pessoa_fisica as $pj)
+                                        @foreach ($pessoa_fisica as $pf)
                                         <tr>
-                                            <td>{{$pj->pessoa_id}}</td>
-                                            <td>{{$pj->nome}}</td>
-                                            <td>{{$pj->sobrenome}}</td>
-                                            <td>{{$pj->pessoa->formartarCPF()}}</td>
+                                            <td>{{$pf->pessoa_id}}</td>
+                                            <td>{{$pf->nome}}</td>
+                                            <td>{{$pf->sobrenome}}</td>
+                                            <td>{{$pf->pessoa->formartarCPF()}}</td>
                                             <td>
-                                                <a class="btn btn-warning btn-xs" href="{{route('pessoa.editar',$pj->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Alterar"><i class="glyphicon glyphicon-edit"></i></a>
-                                                <button class="btn btn-danger btn-xs"data-toggle="modal" data-target="#modalexcluir" id="btnexcluir" data-id="{{$pj->pessoa_id}}" data-url="{{ action('PessoaController@destroy')}}"><i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Excluir"></i></button>
+                                                <a class="btn btn-warning btn-xs" href="{{route('pessoa.editar',$pf->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Alterar"><i class="glyphicon glyphicon-edit"></i></a>
+                                                <button class="btn btn-danger btn-xs excluir" data-toggle="modal" data-target="#modalexcluir" id="btnexcluir" data-id="{{$pf->pessoa_id}}" data-url="{{ action('PessoaController@destroy')}}"><i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Excluir"></i></button>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -75,12 +75,18 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>1,001</td>
-                                                <td>Lorem</td>
-                                                <td>ipsum</td>
-                                                <td>dolor</td>
-                                                <td>dolor</td>
-                                            </tr>
+                                                    @foreach ($pessoa_juridica as $pj)
+                                                    <tr>
+                                                        <td>{{$pj->pessoa_id}}</td>
+                                                        <td>{{$pj->razao_social}}</td>
+                                                        <td>{{$pj->nome_fantasia}}</td>
+                                                        <td>{{$pj->pessoa->formartarCNPJ()}}</td>
+                                                        <td>
+                                                            <a class="btn btn-warning btn-xs" href="{{route('pessoa.editar',$pj->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Alterar"><i class="glyphicon glyphicon-edit"></i></a>
+                                                            <button class="btn btn-danger btn-xs excluir" data-toggle="modal" data-target="#modalexcluir" id="btnexcluir" data-id="{{$pj->pessoa_id}}" data-url="{{ action('PessoaController@destroy')}}"><i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Excluir"></i></button>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -119,10 +125,12 @@
         </div>
     @endsection
     @section('js')
-    <script>
-        $('#btnexcluir').on('click',function(){
-            $('#pessoa_id').val($(this).data("id"));
+    <script type="">
+        $(document).ready(function(){
+           $('.excluir').click(function(){
+            $('#pessoa_id').attr('value',$(this).data("id"));
             $('#formexcluir').attr('action',$(this).data("url"));
+           });
         });
     </script>
     @endsection

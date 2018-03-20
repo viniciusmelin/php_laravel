@@ -33,7 +33,7 @@ class Pessoa extends Model
         return $string;
     }
 
-    private function formartarCNPJ()
+    public function formartarCNPJ()
     {
         $string = $this->cpfcnpj;
         $string = substr($string, 0, 2) . '.' . substr($string, 2, 3) . 

@@ -4,9 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Carbon\Carbon;
+use App\Rules\Cnpj;
 use App\Rules\Cpf;
 
-class PessoFisicaRequest extends FormRequest
+class PessoaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -44,12 +45,12 @@ class PessoFisicaRequest extends FormRequest
                 
             ];
         }
-        else
+        else if($this->optpessoa ==2)
         {
             return [
-                "cnpj.required"=> "Campo é Obrigatório CNPJ",
-                "cnpj.max"=> "Tamanho maxímo é 11 números",
-                "cnpj.unique"=> "Tamanho maxímo é 11 números",
+                "cpfcnpj.required"=> "Campo é Obrigatório CNPJ",
+                "cpfcnpj.digits_between"=> "Tamanho deve ser 14 números",
+                "cpfcnpj.unique"=> "CNPJ já cadastrado",
                 "nome_fantasia.required"=> "Campo é Obrigatório",
                 "nome_fantasia.max"=> "Tamanho maxímo é 50 caracteres",
                 "nome_fantasia.min"=> "Tamanho mínimo é 2 caracteres",
@@ -61,9 +62,8 @@ class PessoFisicaRequest extends FormRequest
                 "bairro.required"=> "Campo é Obrigatório",
                 "cidade.required"=> "Campo é Obrigatório",
                 "uf.required"=> "Campo é Obrigatório",
-                "cep.required"=> "Campo é Obrigatório",
-                
-                
+                "cep.required"=> "Campo é Obrigatório"
+            
             ];
         }
     }
@@ -95,10 +95,10 @@ class PessoFisicaRequest extends FormRequest
                 
             ];
         }
-        else
+        else if($this->optpessoa ==2)
         {
             return [
-                "cnpj"=> "required|max:11",
+                "cpfcnpj"=> ['required',new Cnpj($this->cpfcnpj),"unique:pessoa".($this->id ? ",id,$this->id":""),"digits_between:14,14"],
                 "razao_social"=> "required|max:50|min:2",
                 "nome_fantasia"=> "required|max:50|min:1",
                 "logradouro"=> "required",
@@ -106,7 +106,7 @@ class PessoFisicaRequest extends FormRequest
                 "bairro"=> "required",
                 "cidade"=> "required",
                 "uf"=> "required",
-                "cep"=> "required",
+                "cep"=> "required"
                 
             ];
         }
@@ -130,3 +130,4 @@ class PessoFisicaRequest extends FormRequest
         $this->merge(['cep' => preg_replace( '/[^0-9]/', '', $this->request->get('cep') )]);
     }
 }
+
