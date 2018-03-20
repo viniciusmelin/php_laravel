@@ -184,7 +184,7 @@
                 </div>
               </div>
             </div>
-            <a class="btn btn-danger">Cancelar</a>
+            <a href="{{url()->previous()}}" class="btn btn-danger">Cancelar</a>
             <button type="submit" class="btn btn-success">Salvar</button>
           </form>
         </div>

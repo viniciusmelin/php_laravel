@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Atualizar Pessoa</div>
+        <div class="panel-heading"><h2 class="sub-header">Atualizar Pessoa Jurídica</h1></div>
   
         <div class="panel-body">
           <form method="POST" action="{{route('pessoa.atualizar')}}">
@@ -111,7 +111,7 @@
                 <div class="col-md-5">
                   <div class="form-group has-feedback {{$errors->has('complemento') ? 'has-error':''}}">
                     <label for="complemento">Complemento</label>
-                    <input type="text" class="form-control" id="complemento" name="complemento" value="{{old('complemento',$pessoajuridica->pessoajuridica->endereco->complento)}}"> @if($errors->has('complemento'))
+                    <input type="text" class="form-control" id="complemento" name="complemento" value="{{old('complemento',$pessoajuridica->pessoajuridica->endereco->complemento)}}"> @if($errors->has('complemento'))
                     <span class="help-block">
                       <strong>{{$errors->first('complemento')}}</strong>
                     </span>

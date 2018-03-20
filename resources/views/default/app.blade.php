@@ -47,6 +47,11 @@
         </nav>
 
         @yield('content')
+        <footer>
+                <div class="col-lg-12">
+                        <p><strong> Desenvolvido por:</strong> <a href="https://www.linkedin.com/in/viniciusmelin/" target="_blank"><i class="fa fa-linkedin-square"></i> Vinicius Melin</a></p>
+                </div>
+        </footer>
     </div>
 
     <!-- Scripts -->

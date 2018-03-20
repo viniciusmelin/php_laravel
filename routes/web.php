@@ -21,3 +21,4 @@ Route::post('pessoa/salvar','PessoaController@store')->name('pessoa.salvar');
 Route::post('pessoa/excluir','PessoaController@destroy')->name('pessoa.excluir');
 Route::get('pessoa/editar/{id}','PessoaController@edit')->name('pessoa.editar');
 Route::post('pessoa/atualizar','PessoaController@update')->name('pessoa.atualizar');
+Route::get('pessoa/visualizar/{id}','PessoaController@show')->name('pessoa.visualizar');

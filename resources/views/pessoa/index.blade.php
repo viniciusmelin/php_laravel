@@ -4,7 +4,9 @@
         <a href="{{route('pessoa.criar')}}" class="btn btn-success btn-lg">Cadastrar Pessoa
             <i class="glyphicon glyphicon-plus-sign"></i>
         </a>
+
     </div>
+
 </div>
 <div class="container" style="margin-top: 10px">
     <div class="container">
@@ -37,6 +39,7 @@
                                             <td>{{$pf->pessoa->formartarCPF()}}</td>
                                             <td>
                                                 <a class="btn btn-warning btn-xs" href="{{route('pessoa.editar',$pf->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Alterar"><i class="glyphicon glyphicon-edit"></i></a>
+                                                <a class="btn btn-info btn-xs" href="{{route('pessoa.visualizar',$pf->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Visualizar"><i class="glyphicon glyphicon-eye-open"></i></a>
                                                 <button class="btn btn-danger btn-xs excluir" data-toggle="modal" data-target="#modalexcluir" id="btnexcluir" data-id="{{$pf->pessoa_id}}" data-url="{{ action('PessoaController@destroy')}}"><i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Excluir"></i></button>
                                             </td>
                                         </tr>
@@ -83,6 +86,7 @@
                                                         <td>{{$pj->pessoa->formartarCNPJ()}}</td>
                                                         <td>
                                                             <a class="btn btn-warning btn-xs" href="{{route('pessoa.editar',$pj->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Alterar"><i class="glyphicon glyphicon-edit"></i></a>
+                                                            <a class="btn btn-info btn-xs" href="{{route('pessoa.visualizar',$pj->pessoa_id)}}" data-toggle="tooltip" data-placement="top" title="Visualizar"><i class="glyphicon glyphicon-eye-open"></i></a>
                                                             <button class="btn btn-danger btn-xs excluir" data-toggle="modal" data-target="#modalexcluir" id="btnexcluir" data-id="{{$pj->pessoa_id}}" data-url="{{ action('PessoaController@destroy')}}"><i class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="Excluir"></i></button>
                                                         </td>
                                                     </tr>
@@ -97,7 +101,11 @@
                 </div>
             </div>
         </div>
-
+        <div class="col-lg-12">
+                <a href="{{route('pessoa.json')}}" target="_blank" class="btn btn-info btn-md pull-right">JSON
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                </a>
+        </div>
         <div id="modalexcluir" class="modal fade" role="dialog">
             <div class="modal-dialog">
         

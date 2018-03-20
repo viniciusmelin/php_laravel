@@ -26,6 +26,16 @@ class PessoaController extends Controller
         return view('pessoa.index',compact('pessoa_fisica','pessoa_juridica'));
     }
 
+    public function json()
+    {
+        $pessoa = [];
+        $pessoa_fisica = PessoaFisica::with('pessoa','endereco')->get();
+        $pessoa_juridica = PessoaJuridica::with('pessoa','endereco')->get();
+        //$pessoa = [pessoa_fisica,]
+
+        return response()->json([$pessoa_fisica,$pessoa_juridica]);
+        
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -151,7 +161,25 @@ class PessoaController extends Controller
      */
     public function show($id)
     {
-        //
+        $optpessoa =0;
+        if(PessoaFisica::where('pessoa_id',$id)->first() != null)
+        {
+
+            $pessoa = Pessoa::with(['pessoaFisica','endereco'])->where('id',$id)->first();
+            //return $pessoafisica;
+            $pessoa->pessoajuridica = new PessoaJuridica();
+            $optpessoa= 1;
+            $pessoa_id = $pessoa->id;
+            return view('pessoa.visualizar',compact('pessoa','optpessoa','pessoa_id'));
+        }
+        else if(Pessoa::has('pessoajuridica')->where('id',$id))
+        {
+            $optpessoa= 2;
+            $pessoa = Pessoa::with(['pessoajuridica','endereco'])->where('id',$id)->first();
+            $pessoa->pessoaFisica = new PessoaFisica();
+            $pessoa_id = $pessoa->id;
+            return view('pessoa.visualizar',compact('pessoa','optpessoa','pessoa_id'));
+        }
     }
 
     /**
