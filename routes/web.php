@@ -18,3 +18,6 @@ Auth::routes();
 Route::get('pessoa','PessoaController@index')->name('pessoa.inicial');
 Route::get('pessoa/criar','PessoaController@create')->name('pessoa.criar');
 Route::post('pessoa/salvar','PessoaController@store')->name('pessoa.salvar');
+Route::post('pessoa/excluir','PessoaController@destroy')->name('pessoa.excluir');
+Route::get('pessoa/editar/{id}','PessoaController@edit')->name('pessoa.editar');
+Route::post('pessoa/atualizar','PessoaController@update')->name('pessoa.atualizar');

@@ -18,4 +18,8 @@ class Endereco extends Model
     {
         return $this->hasOne('App\PessoaJuridica',"pessoa_id","pessoa_id");
     }
+    public function pessoa()
+    {
+        return $this->hasOne('App\Pessoa',"pessoa_id","id");
+    }
 }

@@ -24,9 +24,9 @@ class PessoFisicaRequest extends FormRequest
         {
 
             return [
-                "cpf.valido"=> "CPF nao é valido",
-                "cpf.required"=> "Campo é Obrigatório CPF",
-                "cpf.max"=> "Tamanho maxímo é 11 números",
+                "cpfcnpj.required"=> "Campo é Obrigatório CPF",
+                "cpfcnpj.digits_between"=> "Tamanho deve ser 11 números",
+                "cpfcnpj.unique"=> "CPF já cadastrado",
                 "nome.required"=> "Campo é Obrigatório",
                 "nome.max"=> "Tamanho maxímo é 50 caracteres",
                 "nome.min"=> "Tamanho mínimo é 2 caracteres",
@@ -49,6 +49,7 @@ class PessoFisicaRequest extends FormRequest
             return [
                 "cnpj.required"=> "Campo é Obrigatório CNPJ",
                 "cnpj.max"=> "Tamanho maxímo é 11 números",
+                "cnpj.unique"=> "Tamanho maxímo é 11 números",
                 "nome_fantasia.required"=> "Campo é Obrigatório",
                 "nome_fantasia.max"=> "Tamanho maxímo é 50 caracteres",
                 "nome_fantasia.min"=> "Tamanho mínimo é 2 caracteres",
@@ -80,7 +81,7 @@ class PessoFisicaRequest extends FormRequest
             $data = $dataAtual->subYears(19);
            
             return [
-                "cpf"=> ['required',new Cpf($this->cpf)],
+                "cpfcnpj"=> ['required',new Cpf($this->cpf),"unique:pessoa".($this->id ? ",id,$this->id":""),"digits_between:11,11"],
                 //"cpf"=> "max:11",
                 "nome"=> "required|max:50|min:2",
                 "sobrenome"=> "required|max:15|min:1",
@@ -113,29 +114,15 @@ class PessoFisicaRequest extends FormRequest
 
     public function getValidatorInstance()
     {
-        if($this->optpessoa==1)
-        {
-            $this->formatarCpf();
-        }
-        else
-        {
-            $this->formatarCNPJ();
-        }
-
+        $this->formartar();
         $this->formatarCEP();
         return parent::getValidatorInstance();
     }
 
-    protected function formatarCpf()
+    protected function formartar()
     {
         
-        $this->merge(['cpf' => preg_replace( '/[^0-9]/', '', $this->request->get('cpf') )]);
-    }
-
-    protected function formatarCNPJ()
-    {
-        
-        $this->merge(['cnpj' => preg_replace( '/[^0-9]/', '', $this->request->get('cnpj') )]);
+        $this->merge(['cpfcnpj' => preg_replace( '/[^0-9]/', '', $this->request->get('cpfcnpj') )]);
     }
     protected function formatarCEP()
     {

@@ -10,6 +10,8 @@ class PessoaFisica extends Model
     protected $primarykey = 'pessoa_id';
     protected $fillable = ['pessoa_id','data_nascimento','nome','sobrenome'];
 
+    protected $hidden = ['created_at','updated_at'];
+
     public function pessoa()
     {
         return $this->hasOne('App\Pessoa',"id","pessoa_id");

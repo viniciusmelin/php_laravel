@@ -15,7 +15,7 @@ class Pessoa extends Migration
     {
         Schema::create('pessoa', function (Blueprint $table) {
             $table->increments('id');
-            $table->double('cpfcnpj',11,0)->unique();
+            $table->string('cpfcnpj',11)->unique();
             $table->timestamps();
         });
     }
