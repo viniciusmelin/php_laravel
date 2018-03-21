@@ -11,7 +11,7 @@
             @foreach (['danger', 'warning', 'success', 'info'] as $msg)
             @if(session($msg))
                 <div class="col-md-12">
-                  <div class="alert alert-{{$msg}} alert-dismissible" role="alert">
+                  <div id="mensagem" class="alert alert-{{$msg}} alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -148,6 +148,7 @@
            $('.excluir').click(function(){
             $('#pessoa_id').attr('value',$(this).data("id"));
             $('#formexcluir').attr('action',$(this).data("url"));
+            $('#mensagem').fadeOut(500);
            });
         });
     </script>

@@ -42,6 +42,9 @@ class PessoaRequest extends FormRequest
                 "cidade.required"=> "Campo é Obrigatório",
                 "uf.required"=> "Campo é Obrigatório",
                 "cep.required"=> "Campo é Obrigatório",
+                "cep.digits_between"=> "Tamanho deve ser 8 caracteres",
+                "uf.min"=> "Tamanho deve ser 2 caracteres",
+                "uf.max"=> "Tamanho deve ser 2 caracteres"
                 
             ];
         }
@@ -62,7 +65,10 @@ class PessoaRequest extends FormRequest
                 "bairro.required"=> "Campo é Obrigatório",
                 "cidade.required"=> "Campo é Obrigatório",
                 "uf.required"=> "Campo é Obrigatório",
-                "cep.required"=> "Campo é Obrigatório"
+                "cep.required"=> "Campo é Obrigatório",
+                "cep.digits_between"=> "Tamanho deve ser 8 caracteres",
+                "uf.min"=> "Tamanho deve ser 2 caracteres",
+                "uf.max"=> "Tamanho deve ser 2 caracteres"
             
             ];
         }
@@ -90,8 +96,8 @@ class PessoaRequest extends FormRequest
                 "numero"=> "required",
                 "bairro"=> "required",
                 "cidade"=> "required",
-                "uf"=> "required",
-                "cep"=> "required",
+                "uf"=> "required|min:2|max:2",
+                "cep"=> "required|digits_between:8,8"
                 
             ];
         }
@@ -105,8 +111,8 @@ class PessoaRequest extends FormRequest
                 "numero"=> "required",
                 "bairro"=> "required",
                 "cidade"=> "required",
-                "uf"=> "required",
-                "cep"=> "required"
+                "uf"=> "required|min:2|max:2",
+                "cep"=> "required|digits_between:8,8"
                 
             ];
         }
