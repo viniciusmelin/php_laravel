@@ -4,12 +4,22 @@
         <a href="{{route('pessoa.criar')}}" class="btn btn-success btn-lg">Cadastrar Pessoa
             <i class="glyphicon glyphicon-plus-sign"></i>
         </a>
-
     </div>
-
 </div>
-<div class="container" style="margin-top: 10px">
+<div class="container" style="margin-top: 20px">
     <div class="container">
+            @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+            @if(session($msg))
+                <div class="col-md-12">
+                  <div class="alert alert-{{$msg}} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Informação: </strong> {{session($msg)}}.
+                  </div>
+                </div>
+            @endif
+            @endforeach
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-default">

@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Cadastrar Pessoa Fisíca</div>
+        <div class="panel-heading"><h3>Atualizar Pessoa Física</h3></div>
   
         <div class="panel-body">
           <form method="POST" action="{{route('pessoa.atualizar')}}" role="form">

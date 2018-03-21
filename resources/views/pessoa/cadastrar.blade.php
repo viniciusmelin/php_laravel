@@ -1,5 +1,5 @@
 @extends('default.app') @section('content')
-<div class="col-md-12">
+<div class="col-lg-12">
   @foreach (['danger', 'warning', 'success', 'info'] as $msg)
   @if(session($msg))
     <div class="row">
@@ -17,10 +17,10 @@
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Cadastrar Pessoa</div>
+        <div class="panel-heading"><h3>Cadastrar Pessoa</h2></div>
   
         <div class="panel-body">
-          <form method="POST" action="{{route('pessoa.salvar')}}">
+          <form id="formcadastro" method="POST" action="{{route('pessoa.salvar')}}">
             {{ csrf_field() }}
             <div class="form-group">
               <label for="pessoa_fisica" class="radio-inline">
@@ -29,16 +29,16 @@
                 <input type="radio" name="optpessoa" value="2" id="pessoa_juridica">Pessoa Jurídica</label>
             </div>
             <div class="row">
-                <div class="form-group has-feedback {{$errors->has('cpfcnpj') ? 'has-error':''}} col-md-4">
+                <div class="col-md-4">
+                  <div class="form-group has-feedback {{$errors->has('cpfcnpj') ? 'has-error':''}}">
                     <label id="labeldescricao" for="cpfcnpj">CPF</label>
-                    <input type="text" class="form-control" name="cpfcnpj" id="cpfcnpj" value="{{old('cpfcnpj','')}}">
-                    <small id="cnpjinformacao" class="form-text text-muted">"Informe um CNPJ válido".</small>
-                    @if($errors->has('cpfcnpj'))
+                    <input type="text" class="form-control" name="cpfcnpj" id="cpfcnpj" value="{{old('cpfcnpj','')}}"> @if($errors->has('cpfcnpj'))
                     <span class="help-block">
                       <strong>{{$errors->first('cpfcnpj')}}</strong>
                     </span>
                     @endif
                   </div>
+                </div>
             </div>
             <div id="divpessoajuridica">
               <div class="row">
@@ -184,7 +184,7 @@
                 </div>
               </div>
             </div>
-            <a href="{{url()->previous()}}" class="btn btn-danger">Cancelar</a>
+            <a href="{{route('pessoa.inicial')}}" class="btn btn-danger">Cancelar</a>
             <button type="submit" class="btn btn-success">Salvar</button>
           </form>
         </div>
@@ -210,12 +210,16 @@
       $('#pessoa_fisica').attr('checked', true);
     }
     $('input[type=radio][name=optpessoa]').click(function () {
+      $('#formcadastro .has-error').removeClass().addClass("form-group");
+      $(this).find('.help-block').hide();
+
+      $('#formcadastro span').remove();
+      $(this).closest('form').find("input[type=text], textarea").val("");
       if (this.value == 1) {
         $('#labeldescricao').text('CPF');
         $('#cpfcnpj').inputmask('999.999.999-99');
         $('#divpessoajuridica input[type="text"]').val('');
         $('#divpessoajuridica').hide();
-        // $("#divpessoajuridica *").attr("disabled", "disabled");
         $('#divpessoaFisica').show();
         $('#pessoa_fisica').attr('checked', true);
       }
@@ -226,7 +230,7 @@
         $('#divpessoajuridica').show();
         $('#divpessoaFisica').hide();
         $('#divpessoaFisica input[type="text"]').val('');
-        //$("#divpessoaFisica *").attr("disabled", "disabled");
+
       }
     });
   })

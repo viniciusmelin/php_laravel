@@ -28,11 +28,9 @@ class PessoaController extends Controller
 
     public function json()
     {
-        $pessoa = [];
+       
         $pessoa_fisica = PessoaFisica::with('pessoa','endereco')->get();
         $pessoa_juridica = PessoaJuridica::with('pessoa','endereco')->get();
-        //$pessoa = [pessoa_fisica,]
-
         return response()->json([$pessoa_fisica,$pessoa_juridica]);
         
     }
@@ -83,21 +81,21 @@ class PessoaController extends Controller
                         if($endereco->save())
                         {
                             
-                            \Session::flash('success',"Pessoa Fisíca cadastrado com sucesso");
+                            \Session::flash('success',"Pessoa Física cadastrado com sucesso");
                             DB::commit();
                             return redirect()->route('pessoa.inicial');
                         }
                     }
                 }
                 DB::rollBack();
-                \Session::flash('warning',"Não foi possível cadastrar Pessoa Fisíca");
+                \Session::flash('warning',"Não foi possível cadastrar Pessoa Física");
                 
                 return back()->withInput();
             }
             catch(\Exeception $e)
             {
                 DB::rollBack();
-                \Session::flash('error',"Não foi possível cadatrar pessoa.Erro:".$e->message()."");
+                \Session::flash('danger',"Não foi possível cadastrar pessoa.Erro:".$e->message()."");
                 return back()->withInput();
             }
 
@@ -143,11 +141,10 @@ class PessoaController extends Controller
             catch(\Exeception $e)
             {
                 DB::rollBack();
-                \Session::flash('error',"Não foi possível cadatrar pessoa.Erro:".$e->message()."");
+                \Session::flash('danger',"Não foi possível cadatrar pessoa.Erro:".$e->message()."");
                 return back()->withInput();
             }
         }
-
 
         \Session::flash('warning',"Não foi possível cadastrar Pessoa");
         return back()->withInput();
@@ -166,7 +163,6 @@ class PessoaController extends Controller
         {
 
             $pessoa = Pessoa::with(['pessoaFisica','endereco'])->where('id',$id)->first();
-            //return $pessoafisica;
             $pessoa->pessoajuridica = new PessoaJuridica();
             $optpessoa= 1;
             $pessoa_id = $pessoa->id;
@@ -190,18 +186,15 @@ class PessoaController extends Controller
      */
     public function edit($id)
     {
-        //return PessoaFisica::where('pessoa_id',$id)->first();
         if(PessoaFisica::where('pessoa_id',$id)->first() != null)
         {
 
            $pessoafisica = Pessoa::with(['pessoaFisica','endereco'])->where('id',$id)->first();
-           //return $pessoafisica;
            return view('pessoa.editarPessoaFisica',compact('pessoafisica'));
         }
         else if(Pessoa::has('pessoajuridica')->where('id',$id))
         {
             $pessoajuridica = Pessoa::with(['pessoajuridica','endereco'])->where('id',$id)->first();
-            //return $pessoafisica;
             return view('pessoa.editarPessoaJuridica',compact('pessoajuridica'));
         }
         
@@ -221,7 +214,7 @@ class PessoaController extends Controller
         {
             try
             {
-                //DB::beginTransaction();
+                DB::beginTransaction();
                 $pessoa =  Pessoa::with(['pessoaFisica','endereco'])->where('id',$request->id)->first();
                 $pessoa->cpfcnpj = $request->cpfcnpj;
                 $pessoa->save();
@@ -243,20 +236,26 @@ class PessoaController extends Controller
                     "uf" => $request->uf,
                     "cep" => $request->cep
                     ]);
-                
+                DB::commit();
+                \Session::flash('success',"Pessoa Física atualizada com sucesso");
                 return redirect()->route('pessoa.inicial');
 
             }
             catch(\Exception $e)
             {
-                return $e->getMessage();
+                DB::rollBack();
+                \Session::flash('danger',"Não foi possível atualizar pessoa.Erro:".$e->message()."");
+                return back()->withInput();
             }
+
+            \Session::flash('warning',"Perfil não encontrado de pessoa.Erro:".$e->message()."");
+            return back()->withInput();
         }
         else if($request->optpessoa==2)
         {
             try
             {
-                //DB::beginTransaction();
+                DB::beginTransaction();
                 $pessoa =  Pessoa::with(['pessoajuridica','endereco'])->where('id',$request->id)->first();
                 $pessoa->cpfcnpj = $request->cpfcnpj;
                 $pessoa->save();
@@ -277,13 +276,16 @@ class PessoaController extends Controller
                     "uf" => $request->uf,
                     "cep" => $request->cep
                     ]);
-                
+                DB::commit();
+                \Session::flash('success',"Pessoa Jurídica atualizada com sucesso");
                 return redirect()->route('pessoa.inicial');
 
             }
             catch(\Exception $e)
             {
-                return $e->getMessage();
+                DB::rollBack();
+                \Session::flash('danger',"Não foi possível atualizar pessoa.Erro:".$e->message()."");
+                return back()->withInput();
             }
         }
     }
@@ -298,9 +300,10 @@ class PessoaController extends Controller
     {
         if(Pessoa::where('id',$request->id)->delete())
         {
+            \Session::flash('success',"Pessoa exclúida com sucesso");
             return redirect()->route('pessoa.inicial');
         }
-        return $request;
+        return back()->withInput();;
        
     }
 }

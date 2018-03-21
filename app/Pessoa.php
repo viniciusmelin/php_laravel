@@ -41,9 +41,4 @@ class Pessoa extends Model
         substr($string, 8, 4) . '-' . substr($string, 12, 2);
         return $string;
     }
-    
-    public function updatePessoa(PessoaFisica $pessoa)
-    {
-        return $this->PessoaFisica()->save($pessoa);
-    }
 }

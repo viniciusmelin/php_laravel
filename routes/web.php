@@ -16,9 +16,12 @@ Route::get('/', function () {
 });
 Auth::routes();
 Route::get('pessoa','PessoaController@index')->name('pessoa.inicial');
-Route::get('pessoa/criar','PessoaController@create')->name('pessoa.criar');
-Route::post('pessoa/salvar','PessoaController@store')->name('pessoa.salvar');
-Route::post('pessoa/excluir','PessoaController@destroy')->name('pessoa.excluir');
-Route::get('pessoa/editar/{id}','PessoaController@edit')->name('pessoa.editar');
-Route::post('pessoa/atualizar','PessoaController@update')->name('pessoa.atualizar');
-Route::get('pessoa/visualizar/{id}','PessoaController@show')->name('pessoa.visualizar');
+Route::prefix('pessoa')->group(function(){
+    Route::get('criar','PessoaController@create')->name('pessoa.criar');
+    Route::post('salvar','PessoaController@store')->name('pessoa.salvar');
+    Route::post('excluir','PessoaController@destroy')->name('pessoa.excluir');
+    Route::get('editar/{id}','PessoaController@edit')->name('pessoa.editar');
+    Route::post('atualizar','PessoaController@update')->name('pessoa.atualizar');
+    Route::get('visualizar/{id}','PessoaController@show')->name('pessoa.visualizar');
+});
+

@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Visualizar Pessoa</div>
+        <div class="panel-heading"><h3>Visualizar Pessoa</h3></div>
   
         <div class="panel-body">
           <form>
@@ -133,8 +133,8 @@
               </div>
             </div>
           </form>
-          <a class="btn btn-danger btn-lg" href="{{route('pessoa.inicial')}}">Voltar <i class="glyphicon glyphicon-arrow-left"></i></a>
-          <a class="btn btn-warning btn-lg" href="{{route('pessoa.editar',$pessoa_id)}}">Alterar <i class="glyphicon glyphicon-edit"></i></a>
+          <a class="btn btn-danger btn-md" href="{{route('pessoa.inicial')}}">Voltar <i class="glyphicon glyphicon-arrow-left"></i></a>
+          <a class="btn btn-warning btn-md" href="{{route('pessoa.editar',$pessoa_id)}}">Alterar <i class="glyphicon glyphicon-edit"></i></a>
          
         </div>
         
@@ -153,29 +153,13 @@
     if (optpessoa == 2) {
       $('#pessoa_juridica').attr('checked', true);
       $('#divpessoaFisica').hide();
+      $('#cpfcnpj').inputmask('99.999.999/9999-99');
+
     }
     else {
       $('#cpfcnpj').inputmask('999.999.999-99');
       $('#divpessoajuridica').hide();
       $('#pessoa_fisica').attr('checked', true);
     }
-    $('input[type=radio][name=optpessoa]').click(function () {
-      if (this.value == 1) {
-        $('#labeldescricao').text('CPF');
-        $('#cpfcnpj').inputmask('999.999.999-99');
-        $('#divpessoajuridica input[type="text"]').val('');
-        $('#divpessoajuridica').hide();
-        $('#divpessoaFisica').show();
-        $('#pessoa_fisica').attr('checked', true);
-      }
-      else if (this.value == 2) {
-        $('#labeldescricao').text('CNPJ');
-        $('#cpfcnpj').inputmask('99.999.999/9999-99');
-        $('.form-group has-feedback').prop('has-error');
-        $('#divpessoajuridica').show();
-        $('#divpessoaFisica').hide();
-        $('#divpessoaFisica input[type="text"]').val('');
-      }
-    });
   })
 </script> @endsection
